@@ -1,3 +1,3 @@
-module github.com/yassinebenaid/goenv
+module github.com/Joodek/goenv
 
 go 1.20
