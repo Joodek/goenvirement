@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-// parse one or more files , if files is empty we default to .env
+// parse one or more files , if files not provided is empty we default to .env
 func parseOrDefault(files ...string) (map[string]string, error) {
 
 	// if no files provided we default to .env
@@ -69,7 +69,7 @@ func parseFile(file string) (map[string]string, error) {
 		return nil, err
 	}
 
-	return buildKeyValuePairs(content), nil
+	return buildKeyValuePairs(content)
 
 }
 
@@ -92,8 +92,7 @@ func getFileContent(file string) (string, error) {
 	return string(content), nil
 }
 
-// build the map[key]value structure based on the given string
-func buildKeyValuePairs(s string) map[string]string {
+func buildKeyValuePairs(s string) (map[string]string, error) {
 	lines := strings.Split(s, "\n")
 	pairs := make(map[string]string)
 
@@ -102,28 +101,28 @@ func buildKeyValuePairs(s string) map[string]string {
 		line = strings.TrimSpace(line)
 
 		if !isValidPair(line) {
-			continue
+			return nil, errors.New("invalid key value pairs : [" + line + "]")
 		}
 
 		key, value := splitKeyValue(line)
 		pairs[key] = strings.TrimSpace(strings.Trim(value, "\""))
 	}
 
-	return pairs
+	return pairs, nil
 }
 
-// split l into a key value pairs, excluding any comments or invalid pairs
 func splitKeyValue(l string) (key string, value string) {
 
 	pair := strings.SplitN(l, "=", 2)
 
 	key = strings.TrimSpace(pair[0])
+
+	// exclude comments
 	value = strings.TrimSpace(strings.Split(pair[1], "#")[0])
 
 	return key, value
 }
 
-// check if it looks like key=value
 func isValidPair(l string) bool {
 	rx := regexp.MustCompile(`^(\s)*[A-z_0-9]+(\s)*=(\s)*[^\n]+(\s*)(#[^\n]*)*$`)
 

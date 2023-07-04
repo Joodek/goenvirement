@@ -3,7 +3,6 @@ package goenv
 import (
 	"os"
 	"regexp"
-	"strings"
 )
 
 func expand(env map[string]string) {
@@ -19,10 +18,7 @@ func evaluate(env map[string]string, key string, value string) string {
 		return value
 	}
 
-	// we trim the quotes in case of : "...${key}..."
-	value = strings.Trim(value, "\"")
-
-	// we expand each variable at once
+	// we replace variables with their values
 	return os.Expand(value, func(s string) string {
 		// in case of key1="somthing ${key1} something"
 		// we return to avoid infinit loop
@@ -49,7 +45,7 @@ func evaluate(env map[string]string, key string, value string) string {
 }
 
 func expectExpanding(value string) bool {
-	rx := regexp.MustCompile("^(\")?[^\"]*[$]{[^}]+}[^\"]*(\")?$")
+	rx := regexp.MustCompile("[$]({)?[A-z_0-9]+}?")
 
 	return rx.MatchString(value)
 }

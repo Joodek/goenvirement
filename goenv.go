@@ -75,10 +75,14 @@ func Read(files ...string) (map[string]string, error) {
 }
 
 // read envirement variables from s and return them as map
-func Unmarshal(s string) map[string]string {
-	envs := buildKeyValuePairs(s)
+func Unmarshal(s string) (map[string]string, error) {
+	envs, err := buildKeyValuePairs(s)
+
+	if err != nil {
+		return nil, err
+	}
 
 	expand(envs)
 
-	return envs
+	return envs, nil
 }
