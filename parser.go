@@ -106,8 +106,7 @@ func buildKeyValuePairs(s string) map[string]string {
 		}
 
 		key, value := splitKeyValue(line)
-
-		pairs[key] = value
+		pairs[key] = strings.TrimSpace(strings.Trim(value, "\""))
 	}
 
 	return pairs
@@ -126,8 +125,7 @@ func splitKeyValue(l string) (key string, value string) {
 
 // check if it looks like key=value
 func isValidPair(l string) bool {
-
-	rx := regexp.MustCompile(`^[a-zA-Z_0-9]+(\s)*=(\s)*[^\n\s]+(\s*#[^\n]+)*$`)
+	rx := regexp.MustCompile(`^(\s)*[A-z_0-9]+(\s)*=(\s)*[^\n]+(\s*)(#[^\n]*)*$`)
 
 	return rx.MatchString(l)
 }
