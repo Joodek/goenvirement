@@ -1,3 +1,3 @@
-module github.com/Joodek/goenv
+module github.com/Joodek/godotenv
 
 go 1.20
