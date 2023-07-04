@@ -7,7 +7,7 @@ this is an easy to use go package to intract with `.env` files and manage envire
 install the package via :
 
 ```bash
-    go get github.com/Joodek/goenv
+go get github.com/Joodek/goenv
 ```
 
 set your variables in a `.env` file
@@ -39,7 +39,7 @@ func main(){
 
 ```
 
-by default , the load function will try to load a file named `.env` from the current working directory , you can for sure change this behavior by providing a file name or even multiple files to load
+by default , the load function will try to load a file named `.env` from the current working directory , alternatively you can provide a file path or even multiple files to load
 
 ```go
 
@@ -89,7 +89,7 @@ func main(){
 
 ```
 
-sometimes you may have the variables as a string, not in a file, you can parse them using the `Unmarshal` function like so :
+In case you have the variables as a string, you can parse them using the `Unmarshal` function like so :
 
 ```go
 
@@ -110,7 +110,7 @@ func main(){
 
 #### Comments
 
-in all cases , whichever a function you use , you can write comments
+in all cases , whichever function you use , you can write comments
 
 ```bash
 # this is valid
@@ -133,3 +133,50 @@ APP_PORT=8080
 USER_CACHE="$HOME/programs/cache" # /home/yassinebenaid/programs/cache
 
 ```
+
+### Hint
+
+Unlike other libraries, you don't have to stick with a specific order, this means that you can have somthing similar to this :
+
+```bash
+
+KEY_1="value1-$KEY_2"
+KEY_2="value2-$KEY_3"
+KEY_3="value3-somthing"
+```
+
+and they will all be expanded correctly
+
+```go
+
+func main(){
+
+   goenv.Load()
+
+	fmt.Println(os.Getenv("KEY_1")) // value1-value2-value3-somthing
+	fmt.Println(os.Getenv("KEY_2")) // value2-value3-somthing
+
+  // ...
+}
+
+```
+
+so far everything looks amazing, let's take this example :
+
+```bash
+
+KEY_1="value1-$KEY_2"
+KEY_2="value2-$KEY_3"
+KEY_3="value3-$KEY_1"
+```
+
+as you notice here, we are tring to read a key that will never be reached, this will introduce an infinit loop, but luckly, we will never let that happen, the above example will panic with the folowing error :
+
+```bash
+2023/07/04 20:31:40 recursion detected : trying to read KEY_2 by KEY_1
+panic: recursion detected : trying to read KEY_2 by KEY_1
+```
+
+## Author
+
+[yassinebenaid](https://github.com/yassinebenaid)
