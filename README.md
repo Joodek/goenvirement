@@ -7,7 +7,7 @@ this is an easy to use go package to intract with `.env` files and manage envire
 install the package via :
 
 ```bash
-go get github.com/Joodek/goenv
+go get github.com/Joodek/godotenv
 ```
 
 set your variables in a `.env` file
