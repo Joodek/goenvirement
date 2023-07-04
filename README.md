@@ -7,7 +7,7 @@ this is an easy to use go package to intract with `.env` files and manage envire
 install the package via :
 
 ```bash
-go get github.com/Joodek/godotenv
+go get github.com/Joodek/goenvirement
 ```
 
 set your variables in a `.env` file
@@ -27,11 +27,11 @@ import (
     "fmt"
     "os"
 
-    "github.com/Joodek/godotenv"
+    "github.com/Joodek/goenvirement"
 )
 
 func main(){
-    godotenv.Load()
+    goenvirement.Load()
 
     fmt.Println(os.Getenv("APP_URL")) // http://localhost
     fmt.Println(os.Getenv("APP_PORT")) // 8080
@@ -45,10 +45,10 @@ by default , the load function will try to load a file named `.env` from the cur
 
 func main(){
     // one file
-    godotenv.Load("path/to/file")
+    goenvirement.Load("path/to/file")
 
     // multiple files
-    godotenv.Load("path/to/file1","path/to/file2")
+    goenvirement.Load("path/to/file1","path/to/file2")
 
   // ...
 }
@@ -62,9 +62,9 @@ but if you want to them to be overriden , use the `Overload` function instead
 
 func main(){
 
-    godotenv.Overload()
+    goenvirement.Overload()
    // or
-    godotenv.Overload("path/to/file1","path/to/file2")
+    goenvirement.Overload("path/to/file1","path/to/file2")
 
   // ...
 }
@@ -78,9 +78,9 @@ this is possible by using `Read` function, it will read the variables and return
 
 func main(){
 
-    envs := godotenv.Read()
+    envs := goenvirement.Read()
     // or
-    envs := godotenv.Read("path/to/file1","path/to/file2")
+    envs := goenvirement.Read("path/to/file1","path/to/file2")
 
     fmt.println(envs["SOME_VARIABLE"])
 
@@ -95,7 +95,7 @@ In case you have the variables as a string, you can parse them using the `Unmars
 
 func main(){
 
-   envs := godotenv.Unmarshal(
+   envs := goenvirement.Unmarshal(
 		`APP_URL="http://localhost"
 		APP_PORT =8080 `,
 	)
@@ -151,7 +151,7 @@ and they will all be expanded correctly
 
 func main(){
 
-   godotenv.Load()
+   goenvirement.Load()
 
 	fmt.Println(os.Getenv("KEY_1")) // value1-value2-value3-somthing
 	fmt.Println(os.Getenv("KEY_2")) // value2-value3-somthing
