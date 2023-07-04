@@ -27,11 +27,11 @@ import (
     "fmt"
     "os"
 
-    "github.com/Joodek/goenv"
+    "github.com/Joodek/godotenv"
 )
 
 func main(){
-    goenv.Load()
+    godotenv.Load()
 
     fmt.Println(os.Getenv("APP_URL")) // http://localhost
     fmt.Println(os.Getenv("APP_PORT")) // 8080
@@ -45,10 +45,10 @@ by default , the load function will try to load a file named `.env` from the cur
 
 func main(){
     // one file
-    goenv.Load("path/to/file")
+    godotenv.Load("path/to/file")
 
     // multiple files
-    goenv.Load("path/to/file1","path/to/file2")
+    godotenv.Load("path/to/file1","path/to/file2")
 
   // ...
 }
@@ -62,9 +62,9 @@ but if you want to them to be overriden , use the `Overload` function instead
 
 func main(){
 
-    goenv.Overload()
+    godotenv.Overload()
    // or
-    goenv.Overload("path/to/file1","path/to/file2")
+    godotenv.Overload("path/to/file1","path/to/file2")
 
   // ...
 }
@@ -78,9 +78,9 @@ this is possible by using `Read` function, it will read the variables and return
 
 func main(){
 
-    envs := goenv.Read()
+    envs := godotenv.Read()
     // or
-    envs := goenv.Read("path/to/file1","path/to/file2")
+    envs := godotenv.Read("path/to/file1","path/to/file2")
 
     fmt.println(envs["SOME_VARIABLE"])
 
@@ -95,7 +95,7 @@ In case you have the variables as a string, you can parse them using the `Unmars
 
 func main(){
 
-   envs := goenv.Unmarshal(
+   envs := godotenv.Unmarshal(
 		`APP_URL="http://localhost"
 		APP_PORT =8080 `,
 	)
@@ -151,7 +151,7 @@ and they will all be expanded correctly
 
 func main(){
 
-   goenv.Load()
+   godotenv.Load()
 
 	fmt.Println(os.Getenv("KEY_1")) // value1-value2-value3-somthing
 	fmt.Println(os.Getenv("KEY_2")) // value2-value3-somthing
