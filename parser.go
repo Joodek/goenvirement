@@ -100,6 +100,10 @@ func buildKeyValuePairs(s string) (map[string]string, error) {
 
 		line = strings.TrimSpace(line)
 
+		if isComment(line) || line == "" {
+			continue
+		}
+
 		if !isValidPair(line) {
 			return nil, errors.New("invalid key value pairs : [" + line + "]")
 		}
@@ -125,6 +129,12 @@ func splitKeyValue(l string) (key string, value string) {
 
 func isValidPair(l string) bool {
 	rx := regexp.MustCompile(`^(\s)*[A-z_0-9]+(\s)*=(\s)*[^\n]+(\s*)(#[^\n]*)*$`)
+
+	return rx.MatchString(l)
+}
+
+func isComment(l string) bool {
+	rx := regexp.MustCompile(`^(\s)*#[^\n]*$`)
 
 	return rx.MatchString(l)
 }
