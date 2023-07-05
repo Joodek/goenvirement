@@ -104,33 +104,63 @@ func buildKeyValuePairs(s string) (map[string]string, error) {
 			continue
 		}
 
-		if !isValidPair(line) {
-			return nil, errors.New("invalid key value pairs : [" + line + "]")
+		key, value, err := splitKeyValue(line)
+
+		if err != nil {
+			return nil, err
 		}
 
-		key, value := splitKeyValue(line)
-		pairs[key] = strings.TrimSpace(strings.Trim(value, "\""))
+		pairs[key] = value
 	}
 
 	return pairs, nil
 }
 
-func splitKeyValue(l string) (key string, value string) {
+func splitKeyValue(l string) (key string, value string, err error) {
 
 	pair := strings.SplitN(l, "=", 2)
 
+	if len(pair) != 2 {
+		return "", "", fmt.Errorf("invalid syntax [%s] ", l)
+	}
+
 	key = strings.TrimSpace(pair[0])
 
-	// exclude comments
+	if !isValidKey(key) {
+		return "", "", fmt.Errorf("invalid key  [%s] , the key should only contains letters, numbers and underscore", key)
+	}
+
+	// exclude comments and quotes
 	value = strings.TrimSpace(strings.Split(pair[1], "#")[0])
 
-	return key, value
+	if !isValidValue(value) {
+		return "", "", fmt.Errorf("invalid value [%s] for key [%s]", value, key)
+	}
+
+	if strings.HasPrefix(value, `"`) && strings.HasSuffix(value, `"`) {
+		value = strings.Trim(value, "\"")
+	}
+
+	return key, value, nil
 }
 
-func isValidPair(l string) bool {
-	rx := regexp.MustCompile(`^(\s)*[A-z_0-9]+(\s)*=(\s)*[^\n]+(\s*)(#[^\n]*)*$`)
+func isValidKey(key string) bool {
+	rx := regexp.MustCompile(`^[A-z_0-9]+$`)
 
-	return rx.MatchString(l)
+	return rx.MatchString(key)
+}
+
+func isValidValue(value string) bool {
+
+	var rx *regexp.Regexp
+
+	if strings.HasPrefix(value, `"`) {
+		rx = regexp.MustCompile(`^"[^"]+"$`)
+	} else {
+		rx = regexp.MustCompile(`^.+$`)
+	}
+
+	return rx.MatchString(value)
 }
 
 func isComment(l string) bool {
