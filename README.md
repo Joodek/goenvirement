@@ -1,4 +1,8 @@
 # Goenv
+<div align="center">
+	
+![goenvirement](https://github.com/Joodek/goenvirement/assets/101285507/9e67c7fa-a361-4670-a440-1b7ac8fa0067)
+</div>
 
 this is an easy to use go package to intract with `.env` files and manage envirement variables
 
