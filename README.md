@@ -1,4 +1,5 @@
 # Goenv
+
 <div align="center">
 	
 ![goenvirement](https://github.com/Joodek/goenvirement/assets/101285507/9e67c7fa-a361-4670-a440-1b7ac8fa0067)
@@ -165,7 +166,7 @@ func main(){
 
 ```
 
-so far everything looks amazing, let's take this example :
+so far everything looks amazing, but, look at this example :
 
 ```bash
 
@@ -174,11 +175,10 @@ KEY_2="value2-$KEY_3"
 KEY_3="value3-$KEY_1"
 ```
 
-as you notice here, we are tring to read a key that will never be reached, this will introduce an infinit loop, but luckly, we will never let that happen, the above example will panic with the folowing error :
+as you notice here, we are tring to read a key that will never be reached, this example will return the folowing error :
 
 ```bash
-2023/07/04 20:31:40 recursion detected : trying to read KEY_2 by KEY_1
-panic: recursion detected : trying to read KEY_2 by KEY_1
+recursion detected : trying to read KEY_2 by KEY_1
 ```
 
 ## Author
