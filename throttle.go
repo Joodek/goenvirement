@@ -1,9 +1,5 @@
 package goenvirement
 
-import (
-	"log"
-)
-
 const max_allowed_reads = 1000
 
 var stack = make(map[string]int)
@@ -16,7 +12,7 @@ func throttle(key1 string, key2 string) {
 	calls := stack[key1+key2]
 
 	if calls > max_allowed_reads {
-		log.Panic("recursion detected : trying to read " + key2 + " by " + key1)
+		panic("recursion detected : trying to read " + key2 + " by " + key1)
 	}
 
 	stack[key1+key2]++

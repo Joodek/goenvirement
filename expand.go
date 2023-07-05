@@ -1,11 +1,21 @@
 package goenvirement
 
 import (
+	"fmt"
 	"os"
 	"regexp"
 )
 
-func expand(env map[string]string) {
+func expand(env map[string]string, err *error) {
+	defer func(err *error) {
+		er := recover()
+
+		if er != nil {
+			*err = fmt.Errorf("%v", er)
+		}
+
+	}(err)
+
 	for key, value := range env {
 		env[key] = evaluate(env, key, value)
 	}
@@ -13,12 +23,10 @@ func expand(env map[string]string) {
 
 func evaluate(env map[string]string, key string, value string) string {
 
-	// we return if it doesn't expect expanding
 	if !expectExpanding(value) {
 		return value
 	}
 
-	// we replace variables with their values
 	return os.Expand(value, func(s string) string {
 		// in case of key1="somthing ${key1} something"
 		// we return to avoid infinit loop

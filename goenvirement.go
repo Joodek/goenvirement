@@ -17,7 +17,11 @@ func Load(files ...string) error {
 		return err
 	}
 
-	expand(envs)
+	expand(envs, &err)
+
+	if err != nil {
+		return err
+	}
 
 	for key, value := range envs {
 		if _, ok := os.LookupEnv(key); ok {
@@ -47,7 +51,11 @@ func Overload(files ...string) error {
 		return err
 	}
 
-	expand(envs)
+	expand(envs, &err)
+
+	if err != nil {
+		return err
+	}
 
 	for key, value := range envs {
 		err := os.Setenv(key, value)
@@ -69,7 +77,11 @@ func Read(files ...string) (map[string]string, error) {
 		return nil, err
 	}
 
-	expand(envs)
+	expand(envs, &err)
+
+	if err != nil {
+		return nil, err
+	}
 
 	return envs, nil
 }
@@ -82,7 +94,11 @@ func Unmarshal(s string) (map[string]string, error) {
 		return nil, err
 	}
 
-	expand(envs)
+	expand(envs, &err)
+
+	if err != nil {
+		return nil, err
+	}
 
 	return envs, nil
 }
