@@ -3,6 +3,8 @@ package goenvirement
 import (
 	"fmt"
 	"os"
+	"sort"
+	"strings"
 )
 
 // load the envirements variable from files
@@ -106,8 +108,7 @@ func Unmarshal(s string) (map[string]string, error) {
 
 // stringify the envirement variables from m and return them as string
 func Marshal(m map[string]string) (string, error) {
-
-	var c string
+	var lines []string
 
 	for k, v := range m {
 		if err := validateKeyValuePair(k, v); err != nil {
@@ -118,10 +119,29 @@ func Marshal(m map[string]string) (string, error) {
 			return "", fmt.Errorf("invalid value [%s] for key %s", v, k)
 		}
 
-		c += fmt.Sprintf("%s=%s\n", k, v)
+		lines = append(lines, fmt.Sprintf("%s=%s\n", k, v))
 	}
 
-	return c, nil
+	sort.Strings(lines)
+
+	return strings.Join(lines, ""), nil
+}
+
+// write  variables from m to f file
+func Write(m map[string]string, f string) error {
+	content, err := Marshal(m)
+
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile(f, []byte(content), 0644)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func Append(key string, value string, file string) (err error) {
