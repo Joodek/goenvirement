@@ -1,6 +1,7 @@
 package goenvirement
 
 import (
+	"fmt"
 	"os"
 )
 
@@ -101,4 +102,32 @@ func Unmarshal(s string) (map[string]string, error) {
 	}
 
 	return envs, nil
+}
+
+// stringify the envirement variables from m and return them as string
+func Marshal(m map[string]string) (string, error) {
+
+	var c string
+
+	for k, v := range m {
+		if err := validateKeyValuePair(k, v); err != nil {
+			return "", err
+		}
+
+		c += fmt.Sprintf("%s=%s\n", k, v)
+	}
+
+	return c, nil
+}
+
+func Append(key string, value string, file string) (err error) {
+
+	envs, err := parseOrDefault(file)
+
+	if err != nil {
+		return
+	}
+
+	envs[key] = value
+	return
 }

@@ -125,16 +125,10 @@ func splitKeyValue(l string) (key string, value string, err error) {
 	}
 
 	key = strings.TrimSpace(pair[0])
-
-	if !isValidKey(key) {
-		return "", "", fmt.Errorf("invalid key  [%s] , the key should only contains letters, numbers and underscore", key)
-	}
-
-	// exclude comments and quotes
 	value = strings.TrimSpace(strings.Split(pair[1], "#")[0])
 
-	if !isValidValue(value) {
-		return "", "", fmt.Errorf("invalid value [%s] for key [%s]", value, key)
+	if err = validateKeyValuePair(key, value); err != nil {
+		return "", "", err
 	}
 
 	if strings.HasPrefix(value, `"`) && strings.HasSuffix(value, `"`) {
@@ -142,6 +136,18 @@ func splitKeyValue(l string) (key string, value string, err error) {
 	}
 
 	return key, value, nil
+}
+
+func validateKeyValuePair(key, value string) error {
+	if !isValidKey(key) {
+		return fmt.Errorf("invalid key  [%s] , the key should only contains letters, numbers and underscore", key)
+	}
+
+	if !isValidValue(value) {
+		return fmt.Errorf("invalid value [%s] for key [%s]", value, key)
+	}
+
+	return nil
 }
 
 func isValidKey(key string) bool {
@@ -168,3 +174,5 @@ func isComment(l string) bool {
 
 	return rx.MatchString(l)
 }
+
+// func marshal()
