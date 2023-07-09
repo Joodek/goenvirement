@@ -114,6 +114,10 @@ func Marshal(m map[string]string) (string, error) {
 			return "", err
 		}
 
+		if isComment(v) {
+			return "", fmt.Errorf("invalid value [%s] for key %s", v, k)
+		}
+
 		c += fmt.Sprintf("%s=%s\n", k, v)
 	}
 
