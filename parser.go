@@ -163,7 +163,7 @@ func isValidValue(value string) bool {
 	if strings.HasPrefix(value, `"`) {
 		rx = regexp.MustCompile(`^"[^"]+"$`)
 	} else {
-		rx = regexp.MustCompile(`^.+$`)
+		rx = regexp.MustCompile(`^.*$`)
 	}
 
 	return rx.MatchString(value)
